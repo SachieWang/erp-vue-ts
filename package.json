@@ -9,9 +9,14 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "element-plus": "^1.0.2-beta.36",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vxe-table": "^4.0.7-beta.2",
+    "vxe-table-plugin-element": "^3.0.2",
+    "xe-ajax": "^4.0.5",
+    "xe-utils": "^3.1.12"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
