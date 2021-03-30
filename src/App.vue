@@ -8,7 +8,11 @@
             class="content"
             style="height: calc(100% - 20px); padding: 0px"
           >
-            <router-view @showPicture="showPicture"></router-view>
+            <router-view @showPicture="showPicture" v-slot="{ Component }">
+              <transition name="fade">
+                <component :is="Component" />
+              </transition>
+            </router-view>
           </el-main>
         </el-container>
       </el-main>

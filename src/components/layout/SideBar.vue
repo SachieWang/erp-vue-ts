@@ -31,7 +31,7 @@
             <template #title>物资信息管理</template>
             <el-menu-item index="分类管理">分类管理</el-menu-item>
             <el-menu-item index="物料管理">物料管理</el-menu-item>
-            <el-menu-item index="1-1-3">批次管理</el-menu-item>
+            <el-menu-item index="批次管理">批次管理</el-menu-item>
             <el-menu-item index="1-1-4">价格系数</el-menu-item>
           </el-submenu>
           <el-submenu index="1-2">
@@ -91,22 +91,24 @@ export default {
     handleSelect(key: any, keyPath: any) {
       console.log(key, keyPath);
       if (key == "物料管理") {
-        console.log(this.$route);
-        this.$router.push("/partbasic");
+        console.log((this as any).$route);
+        (this as any).$router.push("/partbasic");
       } else if (key == "分类管理") {
-        this.$router.push("/partclass");
+        (this as any).$router.push("/partclass");
+      } else if (key == "批次管理") {
+        (this as any).$router.push("/batchmanage");
       } else {
-        this.$router.push("/");
+        (this as any).$router.push("/");
       }
     },
     handleHover() {
-      if (this.$data.isCollapse == true) {
-        this.$data.isCollapse = false;
+      if ((this as any).$data.isCollapse == true) {
+        (this as any).$data.isCollapse = false;
       }
     },
     handleLeave() {
-      if (this.$data.isCollapse == false) {
-        this.$data.isCollapse = true;
+      if ((this as any).$data.isCollapse == false) {
+        (this as any).$data.isCollapse = true;
       }
     },
   },

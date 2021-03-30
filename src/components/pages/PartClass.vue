@@ -1,5 +1,10 @@
 <template>
-  <vxe-grid ref="xGrid" v-bind="gridOptions" style="height: 100%">
+  <vxe-grid
+    ref="xGrid"
+    v-bind="gridOptions"
+    :data="demo1.tableData"
+    style="height: 100%"
+  >
     <template #header>
       <div>分类编码</div>
       <input
@@ -19,7 +24,7 @@ import { reactive, ref, nextTick } from "vue";
 import { VxeTableInstance } from "vxe-table";
 export default {
   setup() {
-    const xTree = ref({} as VxeTableInstance);
+    const xGrid = ref({} as VxeTableInstance);
 
     const demo1 = reactive({
       filterName: "",
@@ -28,32 +33,40 @@ export default {
       tableData: [] as any[],
     });
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
       const filterName = XEUtils.toValueString(demo1.filterName).trim();
+      console.log(filterName);
+
       if (filterName) {
-        const options = { children: "children" };
-        const searchProps = ["name"];
-        demo1.tableData = XEUtils.searchTree(
-          demo1.originData,
-          (item) =>
-            searchProps.some(
-              (key) => XEUtils.toValueString(item[key]).indexOf(filterName) > -1
-            ),
-          options
+        const options = { children: "child" };
+        const searchProps = ["classcode", "classname"];
+        await xGrid.value.loadData(
+          XEUtils.searchTree(
+            demo1.originData,
+            (item) =>
+              searchProps.some(
+                (key) =>
+                  XEUtils.toValueString(item[key]).indexOf(filterName) > -1
+              ),
+            options
+          )
         );
         // 搜索之后默认展开所有子节点
         nextTick(() => {
-          const $table = xTree.value;
+          const $table = xGrid.value;
           $table.setAllTreeExpand(true);
         });
       } else {
-        demo1.tableData = demo1.originData;
+        xGrid.value.reloadData(demo1.originData);
+        // demo1.tableData = demo1.originData;
       }
     };
 
     // 创建一个防防抖函数，调用频率间隔 500 毫秒
     const searchEvent = XEUtils.debounce(
       function () {
+        console.log("start");
+
         handleSearch();
       },
       500,
@@ -61,9 +74,14 @@ export default {
     );
 
     demo1.loading = true;
+    XEAjax.get(
+      "http://localhost:8080/njuits-erp/t_partclass/getTree.action"
+    ).then((res) => {
+      demo1.originData = res.data;
+    });
 
     return {
-      xTree,
+      xGrid,
       demo1,
       searchEvent,
     };
@@ -71,6 +89,7 @@ export default {
   data(): any {
     return {
       gridOptions: {
+        data: [],
         border: true,
         loading: false,
         resizable: true,
@@ -250,6 +269,8 @@ export default {
         },
         treeConfig: {
           children: "child",
+          line: true,
+          trigger: "cell",
         },
       },
     };
