@@ -1,22 +1,20 @@
 <template>
-  <el-container>
+  <el-container class="site-body">
     <el-aside width="240px"><SideBar /></el-aside>
-    <el-container class="site-body">
-      <el-main>
-        <el-container class="content-page">
-          <el-main
-            class="content"
-            style="height: calc(100% - 20px); padding: 0px"
-          >
-            <router-view @showPicture="showPicture" v-slot="{ Component }">
-              <transition name="fade">
-                <component :is="Component" />
-              </transition>
-            </router-view>
-          </el-main>
-        </el-container>
-      </el-main>
-    </el-container>
+    <el-main>
+      <el-container class="content-page">
+        <el-main
+          class="content"
+          style="height: calc(100% - 0px); padding: 0px"
+        >
+          <router-view @showPicture="showPicture" v-slot="{ Component }">
+            <transition name="fade">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </el-main>
+      </el-container>
+    </el-main>
   </el-container>
 
   <el-drawer
@@ -87,7 +85,7 @@ export default class App extends Vue {}
 }
 
 .site-body {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 20px);
 }
 
 .el-header {

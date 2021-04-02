@@ -1,4 +1,3 @@
-
 <template>
   <el-row class="tac">
     <el-col :span="23" :push="1">
@@ -29,9 +28,9 @@
           <!-- content -->
           <el-submenu index="物资信息管理">
             <template #title>物资信息管理</template>
-            <el-menu-item index="分类管理">分类管理</el-menu-item>
-            <el-menu-item index="物料管理">物料管理</el-menu-item>
-            <el-menu-item index="批次管理">批次管理</el-menu-item>
+            <el-menu-item index="PartClass">分类管理</el-menu-item>
+            <el-menu-item index="PartBasic">物料管理</el-menu-item>
+            <el-menu-item index="BatchManage">批次管理</el-menu-item>
             <el-menu-item index="1-1-4">价格系数</el-menu-item>
           </el-submenu>
           <el-submenu index="1-2">
@@ -47,11 +46,11 @@
             <el-menu-item index="1-3-1">供应商报价管理</el-menu-item>
           </el-submenu>
         </el-submenu>
-        <el-submenu index="2">
+        <el-submenu index="业务管理">
           <template #title> 业务管理 </template>
-          <el-menu-item index="2-1">期初事务管理</el-menu-item>
-          <el-menu-item index="2-2">采购入库管理</el-menu-item>
-          <el-menu-item index="2-3">生产领料管理</el-menu-item>
+          <el-menu-item index="WareOriginal">期初事务管理</el-menu-item>
+          <el-menu-item index="WarePurchase">采购入库管理</el-menu-item>
+          <el-menu-item index="WareStore">生产领料管理</el-menu-item>
           <el-menu-item index="2-4">采购退料管理</el-menu-item>
           <el-menu-item index="2-5">生产退料管理</el-menu-item>
           <el-menu-item index="2-6">调拨出库管理</el-menu-item>
@@ -59,7 +58,7 @@
           <el-menu-item index="2-8">销售出库管理</el-menu-item>
           <el-menu-item index="2-9">仓库结转管理</el-menu-item>
         </el-submenu>
-        <el-submenu index="3">
+        <el-submenu index="报表分析">
           <template #title>报表分析</template>
           <el-menu-item index="3-1">库存状态报表分析</el-menu-item>
           <el-menu-item index="3-2">库存结转历史分析</el-menu-item>
@@ -88,18 +87,34 @@ export default {
     handleClose(key: any, keyPath: any) {
       console.log(key, keyPath);
     },
-    handleSelect(key: any, keyPath: any) {
-      console.log(key, keyPath);
-      if (key == "物料管理") {
-        console.log((this as any).$route);
-        (this as any).$router.push("/partbasic");
-      } else if (key == "分类管理") {
-        (this as any).$router.push("/partclass");
-      } else if (key == "批次管理") {
-        (this as any).$router.push("/batchmanage");
+    handleSelect(key: any) {
+      console.log((this as any).$router.hasRoute(key)); //是否存在目标路由
+      //存在则跳转
+      if ((this as any).$router.hasRoute(key)) {
+        console.log("route success: ", key);
+        (this as any).$router.push({ name: key });
       } else {
-        (this as any).$router.push("/");
+        //不存
+        var pathToComponent = "../pages/" + key + ".vue";
+        console.log("to import route: ", pathToComponent);
+        //动态添加路由
+        (this as any).$router.addRoute({
+          name: key,
+          path: "/" + key,
+          component: () =>
+            import("../pages/" + key)
+              .then((res) => res)
+              .catch((err) => {
+                console.log("module import error catched!!!");
+                console.log(err);
+                (this as any).$router.push({ name: "home" });
+              }),
+        });
+        (this as any).$router.replace({ name: key }).catch((err: any) => {
+          console.log(err);
+        });
       }
+      console.log((this as any).$router.getRoutes());
     },
     handleHover() {
       if ((this as any).$data.isCollapse == true) {
