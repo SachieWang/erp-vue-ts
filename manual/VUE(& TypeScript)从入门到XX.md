@@ -8,10 +8,14 @@
    ![js组成](./res/1.png)  
    + ECMAscript标准作为核心，规定每一版本的JavaScript的功能特性
    + DOM对象提供对页面文档内容（页面元素）的一系列操作API
-   + BOM对象则包含对浏览器的诸多操作API
+   + BOM对象则包含对浏览器的诸多操作API  
+
    >以上内容形成了javascript的“能力”
-2. **js的角斗场**
+
+2. **js的角斗场**  
+
    >纵使七十二变，难逃天地之间；好马无伯乐，难为千里驹
+
    + **在浏览器下**，js想要施展拳脚，需要有一个懂他拳法的人——js引擎（比如谷歌浏览器的v8引擎），由js引擎来解释js代码并与渲染引擎交互，渲染动态变化的页面
    ![动态页面如何而来 - 引擎之间的交互](./res/2.png)  
    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;*动态页面如何而来 - 引擎之间的交互*
@@ -25,12 +29,14 @@
    + 允许访问不存在的属性  
      ![访问不存在的属性](./res/4.png)  
 2. **何谓“好甲”？**
+
    >大多数编程语言会在发生此类错误时引发错误，有些会在编译期间（在运行任何代码之前）引发错误，某些语言根本不允许那些错误的程序运行。在不运行代码的情况下检测代码中的错误称为**静态检查**。根据要操作的值的种类来确定是什么错误和什么不是错误，这称为**静态类型检查**
 
    上述内容已经描述了**好盔甲**的特征了
    + 静态检查
    + 静态类型检查
    所以不必把TypeScript当作一个全新的语言，进而产生畏难，`不就是给JavaScript加了个静态类型检查器么？`
+
    >兵还是那个兵，只是穿了副好盔甲
 
    如此一来JavaScript显得更加严谨，然而TypeScript提供的并不止这些
@@ -60,7 +66,9 @@
      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;*首页*
      ![search](./res/8.png)  
      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;*搜一搜表格相关的包*
+
      >*“造轮子这方面......造轮子是不可能造轮子的......来Awesome Vue packages的感觉就像回家一样，个个都是好工具，功能又丰富，喔，超喜欢在里面的”*
+
    + **Vue部队基建好:**
      + ① [vue-cli](https://cli.vuejs.org/zh/guide/)提供交互式的操作，轻而易举地构建一个Vue App
        ![start](./res/9.png)  
@@ -75,7 +83,9 @@
    + **部队素质好**  
      VueJS代代演进，现在已经第3代（Vue Next），并且使用vue的库都已做了对应迭代，比如UI库Element-ui演进到Element-Plus（以适配Vue3），vxe-table演进到第4代（Vxe-Table Next），并且Vue3也完全用TypeScript编写，对TypeScript提供了官方支持
 2. **进一步了解Vue**
+
    >这里带一部分项目里的内容作为示例
+
    + 基础
      + 创建应用、挂载应用⭐⭐  
        vue中，我们使用暴露的全局API——createApp()来创建vue应用实例，该接口可接收两个参数，第一个是一个js对象，用来配置该vue应用实例（即根实例）  
@@ -118,7 +128,9 @@
 ### 2、部队集结——认识Element-Plus、Vxe-Table
 
 1. **Element-Plus**
+
    >网站快速成型工具  
+
     Element Plus，一套为开发者、设计师和产品经理准备的基于 Vue 3.0 的桌面端组件库
    + 使用Element有多种途径
      + 可以直接使用Element-Plus提供的[项目模块](https://github.com/element-plus/element-plus-starter)，快速着手开发
