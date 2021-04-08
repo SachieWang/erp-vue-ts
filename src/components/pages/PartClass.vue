@@ -38,6 +38,8 @@ export default {
       console.log(filterName);
 
       if (filterName) {
+        console.log(filterName);
+        
         const options = { children: "child" };
         const searchProps = ["classcode", "classname"];
         await xGrid.value.loadData(

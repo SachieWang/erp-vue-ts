@@ -16,16 +16,13 @@
         style="height: calc(100% - 62px)"
         @mouseenter="handleHover"
         @mouseleave="handleLeave"
+        :collapse="isCollapse"
       >
         <el-submenu index="基础数据">
-          <!-- title -->
           <template #title>
-            <!-- <i class="el-icon-location"></i> -->
-            <!-- <span> -->
-            基础数据
-            <!-- </span> -->
+            <i class="el-icon-setting"></i>
+            <span>基础数据</span>
           </template>
-          <!-- content -->
           <el-submenu index="物资信息管理">
             <template #title>物资信息管理</template>
             <el-menu-item index="PartClass">分类管理</el-menu-item>
@@ -34,7 +31,7 @@
             <el-menu-item index="1-1-4">价格系数</el-menu-item>
           </el-submenu>
           <el-submenu index="1-2">
-            <template #title>仓库信息管理</template>
+            <template #title> 仓库信息管理 </template>
             <el-menu-item index="1-2-1">仓库管理</el-menu-item>
             <el-menu-item index="1-2-2">库位管理</el-menu-item>
             <el-menu-item index="1-2-3">保管员管理</el-menu-item>
@@ -47,7 +44,10 @@
           </el-submenu>
         </el-submenu>
         <el-submenu index="业务管理">
-          <template #title> 业务管理 </template>
+          <template #title>
+            <i class="el-icon-setting"></i>
+            <span> 业务管理</span>
+          </template>
           <el-menu-item index="WareOriginal">期初事务管理</el-menu-item>
           <el-menu-item index="WarePurchase">采购入库管理</el-menu-item>
           <el-menu-item index="WareStore">生产领料管理</el-menu-item>
@@ -59,7 +59,10 @@
           <el-menu-item index="2-9">仓库结转管理</el-menu-item>
         </el-submenu>
         <el-submenu index="报表分析">
-          <template #title>报表分析</template>
+          <template #title>
+            <i class="el-icon-setting"></i>
+            <span>报表分析</span>
+          </template>
           <el-menu-item index="3-1">库存状态报表分析</el-menu-item>
           <el-menu-item index="3-2">库存结转历史分析</el-menu-item>
           <el-menu-item index="3-3">单据明细报表分析</el-menu-item>
@@ -77,15 +80,19 @@
 export default {
   data() {
     return {
-      isCollapse: false,
+      isCollapse: true,
     };
   },
   methods: {
-    handleOpen(key: any, keyPath: any) {
-      console.log(key, keyPath);
+    handleHover() {
+      if ((this as any).$data.isCollapse == true) {
+        (this as any).$data.isCollapse = false;
+      }
     },
-    handleClose(key: any, keyPath: any) {
-      console.log(key, keyPath);
+    handleLeave() {
+      if ((this as any).$data.isCollapse == false) {
+        (this as any).$data.isCollapse = true;
+      }
     },
     handleSelect(key: any) {
       console.log((this as any).$router.hasRoute(key)); //是否存在目标路由
@@ -94,7 +101,6 @@ export default {
         console.log("route success: ", key);
         (this as any).$router.push({ name: key });
       } else {
-        //不存
         var pathToComponent = "../pages/" + key + ".vue";
         console.log("to import route: ", pathToComponent);
         //动态添加路由
@@ -116,15 +122,11 @@ export default {
       }
       console.log((this as any).$router.getRoutes());
     },
-    handleHover() {
-      if ((this as any).$data.isCollapse == true) {
-        (this as any).$data.isCollapse = false;
-      }
+    handleOpen(key: any, keyPath: any) {
+      console.log(key, keyPath);
     },
-    handleLeave() {
-      if ((this as any).$data.isCollapse == false) {
-        (this as any).$data.isCollapse = true;
-      }
+    handleClose(key: any, keyPath: any) {
+      console.log(key, keyPath);
     },
   },
 };

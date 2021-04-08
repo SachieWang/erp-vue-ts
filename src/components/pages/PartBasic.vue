@@ -297,22 +297,11 @@ export default {
       },
     };
   },
-  created() {
-    // (this as any).findSexList();
-  },
   methods: {
     async findSexList() {
       const sexList = await XEAjax.get(
         "http://121.36.220.233:8080/api/v1/product/creates"
       );
-      //   const sexList = await function () {
-      //     return new Promise((resolve) => {
-      //       resolve([
-      //         { value: 1, label: "男" },
-      //         { value: 0, label: "女" },
-      //       ]);
-      //     });
-      //   };
       // 异步更新下拉选项
       (this as any).sexList = sexList;
       const xGrid = (this as any).$refs.xGrid;

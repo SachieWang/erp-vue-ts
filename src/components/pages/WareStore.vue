@@ -1,21 +1,27 @@
 <template>
-  <vxe-grid v-bind="gridOptions">
-    <template #content>
-      <vxe-grid v-bind="subGridOptions"></vxe-grid>
+  <vxe-grid ref="xGrid" v-bind="gridOptions">
+    <template #content="{ row }">
+      <vxe-grid v-bind="subGridOptions" :data="row.expandData"></vxe-grid>
     </template>
   </vxe-grid>
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
-import { VxeGridProps } from "vxe-table";
+import { reactive, ref } from "vue";
+import { VxeGridProps, VxeTableInstance } from "vxe-table";
 import XEAjax from "xe-ajax";
+
 export default {
   setup() {
+    //引用子级表格实例
+    const xGrid = ref({} as VxeTableInstance);
+
+    //主表配置
     const gridOptions = reactive({
       height: "auto",
       border: "full",
       highlightHoverRow: true,
+      highlightCurrentRow: true,
       formConfig: {
         titleWidth: 100,
         titleAlign: "right",
@@ -108,9 +114,10 @@ export default {
       },
       columns: [
         {
-          title: "序号",
-          width: 50,
-          type: "seq",
+          title: "事务编号",
+          field: "billcode",
+          type: "checkbox",
+          width: 150,
         },
         {
           type: "expand",
@@ -119,10 +126,6 @@ export default {
           slots: {
             content: "content",
           },
-        },
-        {
-          title: "事务编号",
-          field: "billcode",
         },
         {
           title: "仓库名称",
@@ -209,17 +212,53 @@ export default {
           },
         },
       },
+      expandConfig: {
+        lazy: true,
+        loadMethod({ row }: any) {
+          return new Promise(function (resolve) {
+            XEAjax.get(
+              `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=` +
+                row.billcode +
+                `&billco=&typecode=&start=0&limit=100`
+            ).then(function (res) {
+              // grid.value.loadData(res.data);
+
+              row.expandData = res.data;
+              resolve();
+            });
+          });
+        },
+      },
+      checkboxConfig: {
+        labelField: "billcode",
+        reserve: true,
+        highlight: true,
+        range: true,
+      },
     } as VxeGridProps);
+
     const subGridOptions = reactive({
       data: [],
       border: true,
       resizable: false,
-      //   height: "auto",
+      toolbarConfig: {
+        buttons: [
+          { code: "insert_actived", name: "新增", icon: "fa fa-plus" },
+          { code: "delete", name: "直接删除", icon: "fa fa-trash-o" },
+          { code: "mark_cancel", name: "删除/取消", icon: "fa fa-trash-o" },
+          {
+            code: "save",
+            name: "保存",
+            icon: "fa fa-save",
+            status: "success",
+          },
+        ],
+      },
       columns: [
         {
           title: "序号",
           width: 50,
-          type: "seq",
+          type: "checkbox",
         },
         {
           title: "事务编码",
@@ -300,24 +339,43 @@ export default {
           field: "note",
         },
       ],
+      checkboxConfig: {
+        labelField: "partcode",
+        reserve: true,
+        highlight: true,
+        range: true,
+      },
       proxyConfig: {
+        enabled: false,
         props: {
           list: "data",
           result: "data",
           total: "total",
         },
         ajax: {
-          // 接收 Promise
-          query: () => {
+          query() {
+            console.log(xGrid.value.getCurrentRecord());
+
             return XEAjax.get(
-              `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=LL202103280001&billco=&typecode=&start=0&limit=100`
+              `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=` +
+                xGrid.value.getCurrentRecord().billcode +
+                `&billco=&typecode=&start=0&limit=100`
             );
+          },
+          delete() {
+            return new Promise(function (resolve) {
+              resolve("success");
+            });
+            // return XEAjax.get(
+            //   `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=LL202103280001&billco=&typecode=&start=0&limit=100`
+            // );
           },
         },
       },
     } as VxeGridProps);
 
     return {
+      xGrid,
       gridOptions,
       subGridOptions,
     };
