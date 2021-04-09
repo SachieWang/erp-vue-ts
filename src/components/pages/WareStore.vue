@@ -14,7 +14,7 @@ import config from '@/config';
 
 export default {
   setup() {
-    //引用子级表格实例
+    //引用父级表格实例
     const xGrid = ref({} as VxeTableInstance);
 
     //主表配置

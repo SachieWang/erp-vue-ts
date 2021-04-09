@@ -34,7 +34,7 @@
 
    上述内容已经描述了**好盔甲**的特征了
    + 静态检查
-   + 静态类型检查
+   + 静态类型检查  
    所以不必把TypeScript当作一个全新的语言，进而产生畏难，`不就是给JavaScript加了个静态类型检查器么？`
 
    >兵还是那个兵，只是穿了副好盔甲
@@ -225,13 +225,13 @@
        项目中的例子  
        ![ref](./res/30.png)  
 
-   + [组合式API](https://v3.cn.vuejs.org/guide/composition-api-introduction.html#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%84%E5%90%88%E5%BC%8F-api)
+   + [组合式API](https://v3.cn.vuejs.org/guide/composition-api-introduction.html#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%84%E5%90%88%E5%BC%8F-api)  
      使用组合式API的目的是整理、重用、共享代码，并且减少单文件组件的体积，将公用的逻辑或配置提取到公共的文件中，各组件以导入的方式重新组织使用。  
-     + setup()⭐⭐⭐
+     + setup()⭐⭐⭐  
        setup选项就是组合式API的入口，使用时间节点是创建组件之前，所以this关键字在这里不可用  
        项目中不乏对setup选项的使用，但还没真正实现组合式API的意义，代码重用较少，改进方式建议参考[官方案例](https://v3.cn.vuejs.org/guide/composition-api-introduction.html#setup-%E7%BB%84%E4%BB%B6%E9%80%89%E9%A1%B9)，逐渐将可重用代码提取到共用文件中
      + ref响应式变量⭐⭐⭐  
-       前面的例子中已经通过 ref 创建过响应式变量，这里做讲解
+       前面的例子中已经通过 ref 创建过响应式变量，这里做讲解  
        ref 接受参数，并将其包裹在一个带有 value property 的对象中返回，然后可以使用该 property（value） 访问或更改响应式变量的值  
        但是，从 setup 返回的 refs 在模板中访问时是被自动解开的，因此不应在模板中使用 .value  
      + toRefs解构响应式对象，获取响应式属性  
@@ -286,19 +286,113 @@
    + 使用Element有多种途径
      + 可以直接使用Element-Plus提供的[项目模块](https://github.com/element-plus/element-plus-starter)，快速着手开发
      + 或者通过vue-cli创建项目后添加Element-Plus插件（Element官方为新版的 vue-cli 准备了相应的 [Element Plus](https://github.com/element-plus/vue-cli-plugin-element-plus) 插件，你可以用它们快速地搭建一个基于 Element Plus 的项目。）
+   + 了解一些UI组件（Element-UI的组件已经全局引入，所以可以直接使用）  
+     1. **布局组件——Row、Col**  
+        Element-Plus使用24栅栏规划更现代和表现一致的页面框架  
+        使用24栅栏优化页面在不同分辨率大小的设备上的表现，例如项目中的侧边导航栏内容就是使用24栅栏布局进行排版  
+        ![Row&Col](./res/31.png)  
+        ![Row&Col_code](./res/32.png)  
+        + 使用\<el-row>组件引入行布局，可通过原生style等属性配置元素样式等内容  
+        + 使用\<el-col>组件引入栅格，并通过span属性配置占位23栅格，以及push配置偏移1栅格  
+
+        >除此之外还有许多配置选项可以参照官网文档
+
+     2. **布局组件——Container**  
+        用于布局的容器组件，方便快速搭建页面的基本结构  
+        项目中使用此布局容器搭建了页面主要结构  
+        ![layout](./res/33.png)
+        页面表现上：大体为左右布局，左为侧边导航栏，右为页面主内容；主内容部分可在嵌入container，进而实现上下布局，上为面包屑导航（项目中已取消，因为目录层级不深，必要性不大），下为表格组件，具体实现如下：  
+        ![layout_code](./res/34.png)  
+        + 第一层通过\<el-container>引入布局容器
+        + 第二层通过\<el-aside>和\<el-main>引入侧边布局和主内容布局，形成页面左右结构
+        + 第三层\<el-main>中继续嵌入\<el-container>、\<el-main>，进行内部布局调整，可尝试在第三层中加入\<el-header>或\<el-footer>实现主内容部分的上下布局
+     3. **抽屉**
+        为了实现简约干净的交互感，物料图片采用抽屉收纳的形式，内部预览图同样采用24栅格布局  
+        ![draw](./res/35.png)  
+        点击数据表中的附件按钮即可弹出抽屉，单击遮罩层即可关闭。  
+        实现如下：  
+        ![draw_code](./res/23.png)  
+        \<el-drawer>引入抽屉组件，通过title、direction、drawer等属性配置抽屉的标题、朝向、和开闭
+     4. **大图预览**  
+        图片采用提供大图预览功能的组件，给用户丰富饱满的交互感，具备：缩放、旋转、切换等常规功能  
+        ![img](./res/36.png)  
+
+   >Element-Plus 提供的组件还有许多，包括图标、按钮、过渡动效等等，可参考官方文档实现
 
 2. **[Vxe-Table](https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/grid/fullEdit)**
 
    >一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...
 
-3. **粘合剂——[vxe-table-plugin-element](https://github.com/x-extends/vxe-table-plugin-element)**
+   1. **单刀直入**  
+      vxe-table中vxe-grid组件是终极合并版，全部功能可配置、可自定义。  
+      重点是在参考其高级表格的[完整功能](https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/grid/fullEdit)的实例，并阅读vxe-grid的API配置文档，掌握其配置
+
+   2. **API文档阅读**
+      + 文档结构
+        ![document](./res/37.png)
+
+        >查阅文档首先注意页面提示，关于参数名称的说明  
+        文档中全部参数采用kebab-case（短横线式）命名  
+        CDN引入环境下可以这样直接使用，但是在vue-cli构建的项目中，需要转化为对应的camelCase（驼峰式）  
+        例如max-height参数在使用时要替换成maxHeight
+
+        文档整体分为四个部分
+        + Props  
+          该部分描述，配置出一个可用的高级表格需要哪些参数，这些参数全部可以 通过加入到一个配置对象的属性，来整合地传递给模板，渲染出需要的表格  
+          ![Props](./res/38.png)
+        + Slots  
+          该部分描述了grid组件定义的具名插槽（关于具名插槽的使用见上文vue中具名插槽部分）  
+          Props中有些部分也有关于slot的描述，用法相同
+        + Events  
+          该部分描述了表格组件定义的一些事件，可在模板中使用v-on指令（简写 @）进行监听
+        + Methods  
+          grid实例具备的功能，需要先通过模板引用获得组件实例，进而可调用其方法(展示一个调用表格实例的getCurrentRecord()函数获取高亮的当前行数据的操作)  
+          ![refgrid](./res/30.png)
+      + 常用参数配置
+        这里关注一些配置表格常用的配置项
+        1. columns，类型是一个数组，数组元素是列配置对象，对象可配置的属性有type列类型、title列标题等等更复杂的功能
+        2. data，一个数组，表格的数据，但通常不使用这种形式，而是用下面的代理形式
+        3. proxy-config（在代码中用对应驼峰式proxyConfig代替），一个对象，配置数据的代理器，参数有autoLoad自动加载、props解析响应体的结构、ajax代理配置（其中有四个选项，涵盖增删改查操作）
+        4. pager-config（pagerConfig），分页工具配置
+        5. form-config（formConfig），表单配置，**查询条件**就在这里
+        6. toolbar-config（toolbarConfig），工具栏配置：增删改、导入导出、表格缩放、字段定制等按钮都在这里配置
+3. **粘合剂——[vxe-table-plugin-element](https://github.com/x-extends/vxe-table-plugin-element)**  
+   这里提这个粘合剂组件的意义是Element-Plus中有众多丰富的UI控件，通过使用该组件，可以在vxe-table中更好地嵌入Element-Plus的优秀控件，这里以物料的图片附件功能做展示：  
+   ![cellRender](./res/39.png)  
+   表格的列配置中有一个cellRender选项，可以配置渲染单元格的内容，但是vxe-table表格提供的渲染器只有input, textarea, select, $input, $select, $button, $buttons, $switch  
+   这里可以通过粘合剂组件来加入Element-Plus中的图标按钮  
+   + 要先在注册vxe-table时设置使用 vxe-table-plugin-element 组件，如图：  
+     ![setting](./res/40.png)
+   + 注册好之后就可以使用[组件文档](https://github.com/x-extends/vxe-table-plugin-element)中提供的Element-Plus的控件  
+     配置参数在前面的截图中  
+     1. name 属性声明要使用 “ElButton” 控件
+     2. attrs 指 ElButton 的配置参数（可在 Element-plus 的按钮部分的文档中找到），这里给按钮配置了大小、形式、图标、和圆角
+     3. events 指 ElButton 定义的自定义事件的处理回调（也可在 Element-plus 的按钮部分的文档中找到）  
+
+   到这里为止，如何将Element-Plus和Vxe-Table相互兼容也讲解完毕。
+
+   >总结一下，vue是新一代应用的开发环境，底层库、是在浏览器原生之上的一种优秀封装与开发，在vue的基础上又有许多方方面面的库可供使用，来构建一个优美强大的web应用，在这个项目中，Element-Plus 是 UI 框架，Vxe-Table是优秀的表格工具库。
 
 ## 二 · 项目意识
 
+>从这里开始要针对本项目的开发，做相应补充
+
 ### 1、项目结构
+
+在代码库的 [README](http://192.168.0.192/wangzexi/erp-frontend) 中做了较为完整的结构描述
 
 ### 2、工具选型
 
++ window下，要配置安装好 [nodejs环境](https://nodejs.org/dist/v14.16.1/node-v14.16.1-x64.msi) (这是14.16.1，长期支持版)
++ 安装 [yarn](https://repo.huaweicloud.com/yarn/v1.9.4/yarn-1.9.4.msi) 包管理工具，或者通过 npm 安装 yarn 包管理器 `npm i -g yarn`，**注意给 yarn仓库 配置华为镜像地址**
++ IDE推荐 VSCode ，对typescript有良好的支持
+
 ### 3、实施步骤（开发，调试，部署）
 
-### 4、Freq BugFix
+1. 克隆本项目的 dev 分支到本地  
+   `git clone -b dev .........`  
+   在dev分支上新建 XX-feature 分支进行特性开发（特性分支开发验证无误后本地合并回 dev 分支，一并上传git仓库）
+2. 在项目根目录下执行 yarn install 安装依赖
+3. 依赖安装好后严格遵守项目结构进行开发（可以先 yarn serve 启动项目，可以品尝热加载特性，实时修改实时验证）项目的启动端口可在根目录 package.json 文件第六行处修改配置，如需进行更多修改可以参考 [vue-cli文档](https://cli.vuejs.org/zh/guide/cli-service.html#vue-cli-service-serve)
+4. 通过 yarn build 命令，可以打包出用于生产环境的 全部 bundle，产出在dist目录下
+5. 生产环境的文件可通过nginx静态文件服务直接部署
