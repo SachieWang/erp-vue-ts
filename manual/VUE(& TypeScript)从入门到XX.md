@@ -104,30 +104,181 @@
        组件的 data 选项是一个函数。Vue 在创建新组件实例的过程中调用此函数。它应该返回一个对象，然后 Vue 会通过响应性系统将其包裹起来，并以 $data 的形式存储在组件实例中  
        在data选项的函数中返回的数据都会被vue包裹为响应式的，所以能动态地渲染在实例中（在视图上看到）如创建组件中图1里的isCollapse参数可以被组件读到其值并利用  
        ![property](./res/17.png)
-     + 生命周期⭐⭐⭐  
+     + 生命周期  
+       ![lifecycle](./res/18.svg)
      + 模板语法，绑定数据（尤其要讲Attribute）⭐  
+       Vue.js 使用了**基于 HTML** 的模板语法，允许开发者声明式地将 DOM 绑定至底层组件实例的数据。所有 Vue.js 的模板都是合法的 HTML，所以能被遵循规范的浏览器和 HTML 解析器解析。  
+       在底层的实现上，Vue 将模板编译成**虚拟 DOM 渲染函数**。结合响应性系统，Vue 能够智能地计算出最少需要重新渲染多少组件，并把 DOM 操作次数减到最少。
+       + 最简单，最基础的数据绑定形式就是在模板中通过**Mustache（双大括号）语法**进行文本插值的绑定（项目中基本没有，多数都是第三方包中进行的实现），给个官方示例
+         ![Mustache](./res/19.png)  
+         上图通过一个双大括号语法将变量msg绑定到DOM中
+       + 但更多的情况项目，项目里要求将一些变量绑定到HTML元素的attribute上，继而控制元素表达出想要的形式，这时Mustache语法不在起作用，而vue则提供了v-bind指令来将元素attribute和实例变量绑定，简单实例如下：  
+         ![simple](./res/20.png)  
+         + 第一处，v-bind是vue指令，: 分隔符后的是html元素的attribute，= 后的表达式就是src attribute要绑定的实例变量名字，如此一来，这个img元素的图片地址可以在控制层灵活调整了
+         + 第二处，v-bind指令简写为 :
+         + 看一个批量绑定的例子，也是项目里比较常见的形式  
+           ![batch](./res/21.png)
      + 指令和指令缩写⭐⭐  
+       上一部分已经讲了v-bind绑定指令，及其简写和批量，vue中还有许多指令，如下是一些项目中使用较频繁的  
+       ![commands](./res/22.png)  
+       + 项目中的列表渲染  
+         ![template](./res/23.png)  
+         ![view](./res/24.png)  
+       + 事件监听  
+         形式是 v-on:事件名="处理回调"  
+         可以简写成 @事件名="处理回调"，在项目中简写形式比较常见
+       + v-model双向绑定
+         常用来在表单控件或者组件上创建双向绑定，贴出官方的讲解  
+         [表单控件绑定](https://v3.cn.vuejs.org/guide/forms.html)  
+         [组件 - 在输入组件上使用自定义事件](https://v3.cn.vuejs.org/guide/component-custom-events.html#v-model-%E5%8F%82%E6%95%B0)
      + 响应变化（计算/侦听属性、方法、侦听器）⭐  
+       + 计算属性  
+         碰到任何包含响应式数据的复杂逻辑，都可以使用计算属性渲染在DOM上  
+         计算属性是放在组件computed选项对象中的一个函数成员（通常直接简写成函数形式），具有缓存效果
+       + 方法  
+         在组件method选项对象中添加的函数对象就是属于该实例的方法，通常用来作为事件监听的处理回调
+       + 侦听器  
+         放在实例的watch选项对象中  
+         计算属性和侦听器都是用来处理响应式的数据，但当需要在数据变化时执行异步或开销较大的操作时，侦听器则更适合，但是！抛开侦听器的使用场景，计算属性比侦听器更应该广泛使用
      + 条件渲染、列表渲染（简单带过）  
-     + 事件处理⭐⭐⭐（监听、处理方法、内联处理、多处理、修饰符、键盘鼠标修饰符）  
-     + 数据双向绑定（修饰符）⭐⭐⭐  
+     + 事件处理补述  
+       在前面已经知道通过 v-on 指令或他的 @ 缩写可以在组件上监听事件，在实例的method选项中注册的函数可以作为事件处理回调。  
+       官方提供了一些时间修饰符来对DOM事件进行处理，让开发者主要处理事件响应逻辑，比如  
+       ![stop](./res/25.png)  
+       除此之外还提供了一些[键鼠系统相关的修饰符](https://v3.cn.vuejs.org/guide/events.html#%E5%86%85%E8%81%94%E5%A4%84%E7%90%86%E5%99%A8%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95)  
    + 组件精讲（创建&注册、数据传递（props单向下行））辅助理解UI库组件和表格库组件  
      + 自定义事件⭐⭐  
-     + 插槽(具名插槽及其缩写)⭐⭐  
+       通过自定义组件，可以摆脱元素原生事件、和框架事件的限制，使交互的形式更丰富  
+       项目中如下:  
+       + 先在子组件vxe-grid中触发show-picture事件  
+         ![emit](./res/26.png)  
+       + 然后再父组件中捕捉，并获取数据进行利用  
+         ![use](./res/27.png)
+     + 插槽(具名插槽及其缩写)  
+       插槽，在vue这个组件式编程的环境下很常见，各个自定义组件的组合使用slot实现地更加便捷轻松，不过项目中直接定义插槽的场景很少，一般都是选择利用第三方组件库中定义好的更规范优雅的形式，其中最为广泛采用的是具名插槽，看一个vue官方的例子  
+       + 定义具名插槽(该部分暴露一个名为base-layout的自定义组件)  
+         ![v-slot](./res/28.png)
+
+         >项目中并不会出现这种形式，因为第三方库，比如Element-Plus和Vxe-table已经定义了不少实用的插槽
+
+       + 使用具名插槽（在base-layout组件中写入template，利用v-slot指令将内容插入定义好的具名插槽的位置）  
+         ![use v-slot](./res/29.png)  
+
+         >这种形式在项目中则会比较常见，就是再利用第三方提供的一些具名插槽
+
+       + 具名插槽的缩写形式（尤为注意，项目里大多时候都采用缩写）  
+
+         ```html
+         <base-layout>
+           <template #header> <!-- # 即 v-slot: 的缩写形式-->
+             <h1>Here might be a page title</h1>
+           </template>
+
+           <template #default>
+             <p>A paragraph for the main content.</p>
+             <p>And another one.</p>
+           </template>
+
+           <template #footer>
+             <p>Here's some contact info</p>
+           </template>
+         </base-layout>
+         ```
+
      + keep-alive  
+       对某些有动态数据具有渲染消耗的动态组件可以包裹一层\<keep-alive>\</keep-alive>组件进行保活，可以节省页面切换后重渲染带来的损耗，优化用户体验  
+       比如：前一个tab页浏览到的位置，进行tab页切换后，还需要在当前位置，不能因为重渲染而丢失之前的浏览状态
      + 模板引用⭐⭐⭐  
-   + 组合式API  
-     + setup()⭐⭐⭐  
+       可以使用 ref attribute 为子组件或 HTML 元素指定引用 ID
+
+       ```html
+       <input ref="input" />
+       ```
+
+       项目中是下面这种用法(script中即渲染上下文中导出响应式变量root给模板使用，模板通过ref attribute 使用 root，这时root变量就相当于是div元素的响应式引用了)  
+
+       ```html
+       <template> 
+         <div ref="root">This is a root element</div>
+       </template>
+
+       <script>
+         import { ref, onMounted } from 'vue'
+
+         export default {
+           setup() {
+             const root = ref(null)
+
+             onMounted(() => {
+               // DOM元素将在初始渲染后分配给ref
+               console.log(root.value) // <div>这是根元素</div>
+             })
+
+             return {
+               root
+             }
+           }
+         }
+       </script>
+       ```
+
+       项目中的例子  
+       ![ref](./res/30.png)  
+
+   + [组合式API](https://v3.cn.vuejs.org/guide/composition-api-introduction.html#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%84%E5%90%88%E5%BC%8F-api)
+     使用组合式API的目的是整理、重用、共享代码，并且减少单文件组件的体积，将公用的逻辑或配置提取到公共的文件中，各组件以导入的方式重新组织使用。  
+     + setup()⭐⭐⭐
+       setup选项就是组合式API的入口，使用时间节点是创建组件之前，所以this关键字在这里不可用  
+       项目中不乏对setup选项的使用，但还没真正实现组合式API的意义，代码重用较少，改进方式建议参考[官方案例](https://v3.cn.vuejs.org/guide/composition-api-introduction.html#setup-%E7%BB%84%E4%BB%B6%E9%80%89%E9%A1%B9)，逐渐将可重用代码提取到共用文件中
      + ref响应式变量⭐⭐⭐  
+       前面的例子中已经通过 ref 创建过响应式变量，这里做讲解
+       ref 接受参数，并将其包裹在一个带有 value property 的对象中返回，然后可以使用该 property（value） 访问或更改响应式变量的值  
+       但是，从 setup 返回的 refs 在模板中访问时是被自动解开的，因此不应在模板中使用 .value  
      + toRefs解构响应式对象，获取响应式属性  
+       setup选项是可以接受两个参数的，其中一个是props，是响应式的，那想要解构props，使用其中的属性，同时又要维护props的响应性，就需要使用vue提供的toRefs  
+
+       ```js
+       import { toRefs } from 'vue'
+
+       setup(props) {
+         const { title } = toRefs(props)
+         console.log(title.value)
+       }
+       ```
+
+       另外，如果要使用props中某个可选属性（即不一定会存在），那用该使用toRef来代替  
+
+       ```js
+       import { toRef } from 'vue'
+       setup(props) {
+         const title = toRef(props, 'title')
+         console.log(title.value)
+       }
+       ```
+
      + 生命周期钩子相关函数  
-     + 侦听  
-     + 计算属性  
-     + toRef创建props中可选参数的引用  
+       通过vue暴露的一系列生命周期钩子函数，可以在setup配置某个生命周期的任务逻辑
+
+       ```js
+       export default {
+         setup() {
+           // mounted初次渲染时要进行的逻辑
+           onMounted(() => {
+             console.log('Component is mounted!')
+           })
+         }
+       }
+       ```
+
+     + 计算属性&侦听  
+       同理计算属性和侦听器也可以通过vue暴露的函数在组合式API中使用（通常是写在组件的选项property中）  
+       函数分别是[computed](https://v3.cn.vuejs.org/api/computed-watch-api.html#computed)和[watch](https://v3.cn.vuejs.org/api/computed-watch-api.html#watch)  
+
+   >至此，要上手该vue项目，所需要的vue知识都已经具备了，接下来需要了解项目所使用的两大部件
 
 ### 2、部队集结——认识Element-Plus、Vxe-Table
 
-1. **Element-Plus**
+1. **[Element-Plus](https://element-plus.gitee.io/#/zh-CN/component/installation)**
 
    >网站快速成型工具  
 
@@ -135,6 +286,12 @@
    + 使用Element有多种途径
      + 可以直接使用Element-Plus提供的[项目模块](https://github.com/element-plus/element-plus-starter)，快速着手开发
      + 或者通过vue-cli创建项目后添加Element-Plus插件（Element官方为新版的 vue-cli 准备了相应的 [Element Plus](https://github.com/element-plus/vue-cli-plugin-element-plus) 插件，你可以用它们快速地搭建一个基于 Element Plus 的项目。）
+
+2. **[Vxe-Table](https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/grid/fullEdit)**
+
+   >一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...
+
+3. **粘合剂——[vxe-table-plugin-element](https://github.com/x-extends/vxe-table-plugin-element)**
 
 ## 二 · 项目意识
 

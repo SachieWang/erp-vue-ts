@@ -7,6 +7,7 @@
 import { reactive } from "vue";
 import { VxeGridProps } from "vxe-table";
 import XEAjax from "xe-ajax";
+import config from '@/config';
 
 export default {
   setup() {
@@ -67,7 +68,7 @@ export default {
         ajax: {
           query: ({ page }) => {
             return XEAjax.get(
-              `http://localhost:8080/njuits-erp/ware_original/view.action?_dc=1617174493571&billcode=&startdate=&enddate=&warecode=&start=` +
+              `http://`+config.host+`:8080/njuits-erp/ware_original/view.action?_dc=1617174493571&billcode=&startdate=&enddate=&warecode=&start=` +
                 page.pageSize * (page.currentPage - 1) +
                 `&limit=` +
                 page.pageSize

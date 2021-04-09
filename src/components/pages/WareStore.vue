@@ -1,7 +1,7 @@
 <template>
   <vxe-grid ref="xGrid" v-bind="gridOptions">
-    <template #content="{ row }">
-      <vxe-grid v-bind="subGridOptions" :data="row.expandData"></vxe-grid>
+    <template #content>
+      <vxe-grid v-bind="subGridOptions"></vxe-grid>
     </template>
   </vxe-grid>
 </template>
@@ -10,6 +10,7 @@
 import { reactive, ref } from "vue";
 import { VxeGridProps, VxeTableInstance } from "vxe-table";
 import XEAjax from "xe-ajax";
+import config from '@/config';
 
 export default {
   setup() {
@@ -196,7 +197,7 @@ export default {
         ajax: {
           query: ({ page, form }) => {
             return XEAjax.get(
-              `http://localhost:8080/njuits-erp/warestore/view.action?_dc=1617176981579&billcode=` +
+              `http://`+config.host+`:8080/njuits-erp/warestore/view.action?_dc=1617176981579&billcode=` +
                 form.billcode +
                 `&busbrandno=` +
                 form.busbrandno +
@@ -212,23 +213,23 @@ export default {
           },
         },
       },
-      expandConfig: {
-        lazy: true,
-        loadMethod({ row }: any) {
-          return new Promise(function (resolve) {
-            XEAjax.get(
-              `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=` +
-                row.billcode +
-                `&billco=&typecode=&start=0&limit=100`
-            ).then(function (res) {
-              // grid.value.loadData(res.data);
+      // expandConfig: {
+      //   lazy: true,
+      //   loadMethod({ row }: any) {
+      //     return new Promise(function (resolve) {
+      //       XEAjax.get(
+      //         `http://`+config.host+`:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=` +
+      //           row.billcode +
+      //           `&billco=&typecode=&start=0&limit=100`
+      //       ).then(function (res) {
+      //         // grid.value.loadData(res.data);
 
-              row.expandData = res.data;
-              resolve();
-            });
-          });
-        },
-      },
+      //         row.expandData = res.data;
+      //         resolve();
+      //       });
+      //     });
+      //   },
+      // },
       checkboxConfig: {
         labelField: "billcode",
         reserve: true,
@@ -354,10 +355,8 @@ export default {
         },
         ajax: {
           query() {
-            console.log(xGrid.value.getCurrentRecord());
-
             return XEAjax.get(
-              `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=` +
+              `http://`+config.host+`:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=` +
                 xGrid.value.getCurrentRecord().billcode +
                 `&billco=&typecode=&start=0&limit=100`
             );
@@ -367,7 +366,7 @@ export default {
               resolve("success");
             });
             // return XEAjax.get(
-            //   `http://localhost:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=LL202103280001&billco=&typecode=&start=0&limit=100`
+            //   `http://`+config.host+`:8080/njuits-erp/warestorede/view.action?_dc=1617181982474&billcode=LL202103280001&billco=&typecode=&start=0&limit=100`
             // );
           },
         },

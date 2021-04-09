@@ -5,7 +5,7 @@
 <script lang="ts">
 import XEAjax from "xe-ajax";
 import XEUtils from "xe-utils";
-
+import config from '@/config';
 export default {
   data() {
     return {
@@ -172,7 +172,7 @@ export default {
             // 接收 Promise 对象
             query: ({ page, form }: any) => {
               return XEAjax.get(
-                `http://localhost:8080/njuits-erp/partbasic/view2.action?partcode=` +
+                `http://`+config.host+`:8080/njuits-erp/partbasic/view2.action?partcode=` +
                   form.partcode +
                   `&partname=&classcode=&warecode=&stacode=&stortype=&spec=&character=&start=` +
                   page.pageSize * (page.currentPage - 1) +
@@ -181,7 +181,7 @@ export default {
               );
             },
             delete: () => console.log("delete"),
-            save: ({ body }: any) => XEAjax.post("https://localhost", body),
+            save: ({ body }: any) => XEAjax.post("https://`+config.host+`", body),
           },
         },
         columns: [
@@ -203,19 +203,19 @@ export default {
                   var prof = [
                     row.prof == null
                       ? null
-                      : "http://localhost:8080" + row.prof,
+                      : "http://`+config.host+`:8080" + row.prof,
                     row.prof2 == null
                       ? null
-                      : "http://localhost:8080" + row.prof2,
+                      : "http://`+config.host+`:8080" + row.prof2,
                     row.prof3 == null
                       ? null
-                      : "http://localhost:8080" + row.prof3,
+                      : "http://`+config.host+`:8080" + row.prof3,
                     row.prof4 == null
                       ? null
-                      : "http://localhost:8080" + row.prof4,
+                      : "http://`+config.host+`:8080" + row.prof4,
                     row.prof5 == null
                       ? null
-                      : "http://localhost:8080" + row.prof5,
+                      : "http://`+config.host+`:8080" + row.prof5,
                   ];
                   var details = {
                     partname: row.partname,

@@ -3,15 +3,13 @@
     <el-aside width="240px"><SideBar /></el-aside>
     <el-main>
       <el-container class="content-page">
-        <el-main
-          class="content"
-          style="height: calc(100% - 0px); padding: 0px"
-        >
-          <router-view @showPicture="showPicture" v-slot="{ Component }">
+        <el-main class="content" style="height: calc(100% - 0px); padding: 0px">
+          <router-view @showPicture="showPicture"></router-view>
+          <!-- <router-view @showPicture="showPicture" v-slot="{ Component }">
             <transition name="fade">
               <component :is="Component" />
             </transition>
-          </router-view>
+          </router-view> -->
         </el-main>
       </el-container>
     </el-main>
@@ -43,7 +41,6 @@
     </el-row>
   </el-drawer>
 </template>
-
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";

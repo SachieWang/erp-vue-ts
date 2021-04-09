@@ -22,6 +22,8 @@ import XEAjax from "xe-ajax";
 import XEUtils from "xe-utils";
 import { reactive, ref, nextTick } from "vue";
 import { VxeTableInstance } from "vxe-table";
+import config from "@/config";
+
 export default {
   setup() {
     const xGrid = ref({} as VxeTableInstance);
@@ -39,7 +41,7 @@ export default {
 
       if (filterName) {
         console.log(filterName);
-        
+
         const options = { children: "child" };
         const searchProps = ["classcode", "classname"];
         await xGrid.value.loadData(
@@ -77,7 +79,7 @@ export default {
 
     demo1.loading = true;
     XEAjax.get(
-      "http://localhost:8080/njuits-erp/t_partclass/getTree.action"
+      `http://` + config.host + `:8080/njuits-erp/t_partclass/getTree.action`
     ).then((res) => {
       demo1.originData = res.data;
     });
@@ -207,11 +209,14 @@ export default {
             query: ({ form }: any) => {
               console.log(form);
               return XEAjax.get(
-                `http://localhost:8080/njuits-erp/t_partclass/getTree.action`
+                `http://` +
+                  config.host +
+                  `:8080/njuits-erp/t_partclass/getTree.action`
               );
             },
             delete: () => console.log("delete"),
-            save: ({ body }: any) => XEAjax.post("https://localhost", body),
+            save: ({ body }: any) =>
+              XEAjax.post("https://`+config.host+`", body),
           },
         },
         columns: [
