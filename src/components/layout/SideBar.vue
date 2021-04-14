@@ -18,32 +18,36 @@
         @mouseleave="handleLeave"
         :collapse="isCollapse"
       >
-        <el-submenu index="基础数据">
+        <el-submenu index="baseinfo">
           <template #title>
             <i class="el-icon-setting"></i>
             <span>基础数据</span>
           </template>
-          <el-submenu index="物资信息管理">
+          <el-submenu index="MaterialInfManage">
             <template #title>物资信息管理</template>
             <el-menu-item index="PartClass">分类管理</el-menu-item>
             <el-menu-item index="PartBasic">物料管理</el-menu-item>
             <el-menu-item index="BatchManage">批次管理</el-menu-item>
-            <el-menu-item index="1-1-4">价格系数</el-menu-item>
+            <el-menu-item index="PriceCoefficient">价格系数</el-menu-item>
           </el-submenu>
-          <el-submenu index="1-2">
+          <el-submenu index="WarehouseInfManage">
             <template #title> 仓库信息管理 </template>
-            <el-menu-item index="1-2-1">仓库管理</el-menu-item>
+            <el-menu-item index="WareHouse">仓库管理</el-menu-item>
             <el-menu-item index="1-2-2">库位管理</el-menu-item>
             <el-menu-item index="1-2-3">保管员管理</el-menu-item>
             <el-menu-item index="1-2-4">库存事务定义</el-menu-item>
           </el-submenu>
-          <el-submenu index="1-3">
+          <el-submenu index="SupplierInfManage">
             <template #title>供应商资料管理</template>
-            <el-menu-item index="1-3-1">供应商资料管理</el-menu-item>
-            <el-menu-item index="1-3-1">供应商报价管理</el-menu-item>
+            <el-menu-item index="SupplierInformation">
+              供应商资料管理
+            </el-menu-item>
+            <el-menu-item index="SupplierQuotation">
+              供应商报价管理
+            </el-menu-item>
           </el-submenu>
         </el-submenu>
-        <el-submenu index="业务管理">
+        <el-submenu index="BusinessManage">
           <template #title>
             <i class="el-icon-setting"></i>
             <span> 业务管理</span>
@@ -51,14 +55,14 @@
           <el-menu-item index="WareOriginal">期初事务管理</el-menu-item>
           <el-menu-item index="WarePurchase">采购入库管理</el-menu-item>
           <el-menu-item index="WareStore">生产领料管理</el-menu-item>
-          <el-menu-item index="2-4">采购退料管理</el-menu-item>
+          <el-menu-item index="WareBack">采购退料管理</el-menu-item>
           <el-menu-item index="2-5">生产退料管理</el-menu-item>
           <el-menu-item index="2-6">调拨出库管理</el-menu-item>
           <el-menu-item index="2-7">调整事务管理</el-menu-item>
           <el-menu-item index="2-8">销售出库管理</el-menu-item>
           <el-menu-item index="2-9">仓库结转管理</el-menu-item>
         </el-submenu>
-        <el-submenu index="报表分析">
+        <el-submenu index="ReportAnalysis">
           <template #title>
             <i class="el-icon-setting"></i>
             <span>报表分析</span>
@@ -94,21 +98,27 @@ export default {
         (this as any).$data.isCollapse = true;
       }
     },
-    handleSelect(key: any) {
+    handleSelect(key: any, keyPath: any) {
+      let path = "";
+      for (let index = 0; index < keyPath.length; index++) {
+        path = path + "/" + keyPath[index];
+      }
+      console.log(path);
+
       console.log((this as any).$router.hasRoute(key)); //是否存在目标路由
       //存在则跳转
       if ((this as any).$router.hasRoute(key)) {
         console.log("route success: ", key);
         (this as any).$router.push({ name: key });
       } else {
-        var pathToComponent = "../pages/" + key + ".vue";
+        var pathToComponent = "../pages" + path + "/" + key;
         console.log("to import route: ", pathToComponent);
         //动态添加路由
         (this as any).$router.addRoute({
           name: key,
           path: "/" + key,
           component: () =>
-            import("../pages/" + key)
+            import("../pages" + path + "/" + key)
               .then((res) => res)
               .catch((err) => {
                 console.log("module import error catched!!!");

@@ -1,3 +1,12 @@
+<!--
+ * @Author: SachieW
+ * @Date: 2021-03-29 16:08:21
+ * @LastEditTime: 2021-04-14 12:55:31
+ * @LastEditors: SachieW
+ * @Description: 
+ * @FilePath: \erp-vue-ts\README.md
+-->
+
 # ERP-Frontend（vue、typescript版本）
 
 ## 描述
@@ -14,6 +23,14 @@ erp
 &emsp;&emsp;|--- components/（vue组件目录）  
 &emsp;&emsp;|&emsp;&emsp;|--- layout/（布局组件，此处目前只有SideBar，定义侧边栏组件）  
 &emsp;&emsp;|&emsp;&emsp;|--- pages/（页面主内容，即各项表格）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|--- baseinfo/（基础信息大块）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|&emsp;&emsp;|--- MaterialInfManage/（物料相关）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|&emsp;&emsp;|--- SupplierInfManage/（供应商相关）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|&emsp;&emsp;|--- WarehouseInfManage/（仓库相关）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|--- BusinessManage/（业务管理大块）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|&emsp;&emsp;|--- ...  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|--- ReportAnalysis/（报表分析大块）  
+&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;|&emsp;&emsp;|--- ...  
 &emsp;&emsp;|--- config/（应用内的共享配置，如服务端地址）  
 &emsp;&emsp;|--- plugins/（组件应用的定义文件目录，主要用于定义element、vue-router、vxe-table等组件的引用）  
 &emsp;&emsp;|--- router/（初始路由定义文件目录，在此处配置主页面路由、404路由等，其余动态路由在SideBar组件中注册管理）  

@@ -1,15 +1,33 @@
+<!--
+ * @Author: SachieW
+ * @Date: 2021-04-13 14:33:07
+ * @LastEditTime: 2021-04-14 18:54:43
+ * @LastEditors: SachieW
+ * @Description: 
+ * @FilePath: \erp-vue-ts\src\components\pages\baseinfo\MaterialInfManage\PartClass\PartClassEdit.vue
+-->
 <template>
-  <vxe-grid ref="xGrid" v-bind="gridOptions" style="height: 100%"></vxe-grid>
+  <vxe-grid ref="xGrid" v-bind="gridOptions"></vxe-grid>
 </template>
 
-<script lang="ts">
+<script  lang="ts">
 import XEAjax from "xe-ajax";
 import XEUtils from "xe-utils";
+import { ref } from "vue";
+import { VxeTableInstance } from "vxe-table";
 import config from "@/config";
+
 export default {
-  data() {
+  setup() {
+    const xGrid = ref({} as VxeTableInstance);
+    return {
+      xGrid,
+    };
+  },
+  data(): any {
     return {
       gridOptions: {
+        data: [],
         border: true,
         loading: false,
         resizable: true,
@@ -17,9 +35,9 @@ export default {
         showOverflow: true,
         highlightHoverRow: true,
         keepSource: true,
-        id: "partbasic",
+        id: "partclassedit",
         height: "auto",
-        // rowId: "id",
+        rowId: "id",
         customConfig: {
           storage: true,
           checkMethod: (this as any).checkColumnMethod,
@@ -49,79 +67,45 @@ export default {
           titleAlign: "right",
           items: [
             {
-              field: "partcode",
-              title: "物料编码",
-              span: 8,
-              titlePrefix: {
-                message: "app.body.valid.rName",
-                icon: "fa fa-exclamation-circle",
-              },
+              span: 2,
+              align: "center",
+              field: "switchStatus",
               itemRender: {
-                name: "$input",
-                props: { placeholder: "请输入名称" },
-              },
-            },
-            {
-              field: "email",
-              title: "邮件",
-              span: 8,
-              itemRender: {
-                name: "$input",
-                props: { placeholder: "请输入邮件" },
-              },
-            },
-            {
-              field: "nickname",
-              title: "昵称",
-              span: 8,
-              itemRender: {
-                name: "$input",
-                props: { placeholder: "请输入昵称" },
-              },
-            },
-            {
-              field: "role",
-              title: "角色",
-              span: 8,
-              folding: true,
-              itemRender: {
-                name: "$input",
-                props: { placeholder: "请输入角色" },
-              },
-            },
-            {
-              field: "sex",
-              title: "性别",
-              span: 8,
-              folding: true,
-              titleSuffix: {
-                message: "注意，必填信息！",
-                icon: "fa fa-info-circle",
-              },
-              itemRender: {
-                name: "$select",
-                options: [],
-              },
-            },
-            {
-              field: "age",
-              title: "年龄",
-              span: 8,
-              folding: true,
-              itemRender: {
-                name: "$input",
+                enable: false,
+                name: "$switch",
                 props: {
-                  type: "number",
-                  min: 1,
-                  max: 120,
-                  placeholder: "请输入年龄",
+                  openLabel: "编辑模式",
+                  closeLabel: "编辑模式",
+                },
+                events: {
+                  change: () => {
+                    (this as any).$router.back();
+                  },
                 },
               },
             },
             {
-              span: 24,
+              field: "typeCode",
+              title: "分类编码",
+              span: 8,
+              itemRender: {
+                name: "$input",
+                props: { placeholder: "请输入分类编码" },
+              },
+            },
+            {
+              field: "typeName",
+              title: "分类名称",
+              span: 8,
+              itemRender: {
+                name: "$input",
+                props: { placeholder: "请输入分类名称" },
+              },
+            },
+            {
+              span: 6,
               align: "center",
-              collapseNode: true,
+              // collapseNode: true,
               itemRender: {
                 name: "$buttons",
                 children: [
@@ -170,100 +154,52 @@ export default {
           },
           ajax: {
             // 接收 Promise 对象
-            query: ({ page, form }: any) => {
-              return XEAjax.get(
-                `http://` +
-                  config.host +
-                  `:8080/njuits-erp/partbasic/view2.action?partcode=` +
-                  form.partcode +
-                  `&partname=&classcode=&warecode=&stacode=&stortype=&spec=&character=&start=` +
-                  page.pageSize * (page.currentPage - 1) +
-                  `&limit=` +
-                  page.pageSize
+            query: function ({ page, form }: any) {
+              form.switchStatus = true;
+
+              var Param = form;
+              Param.start = page.pageSize * (page.currentPage - 1);
+              Param.limit = page.pageSize;
+              return XEAjax.post(
+                `http://` + config.host + `:8080/materialtype/queryByParam`,
+                Param
               );
             },
-            delete: () => console.log("delete"),
+            delete: ({ body }: any) =>
+              XEAjax.post(
+                `http://` + config.host + `:8080/materialtype/save`,
+                body
+              ),
             save: ({ body }: any) =>
-              XEAjax.post("https://`+config.host+`", body),
+              XEAjax.post(
+                `http://` + config.host + `:8080/materialtype/save`,
+                body
+              ),
           },
         },
         columns: [
           { type: "checkbox", title: "序号", width: 120 },
           {
-            title: "图片资料",
-            cellRender: {
-              name: "ElButton",
-              attrs: {
-                size: "mini",
-                type: "success",
-                icon: "el-icon-message",
-                circle: true,
-              },
-              events: {
-                click: ({ row }: any) => {
-                  console.log(row);
-
-                  var prof = [
-                    row.prof == null
-                      ? null
-                      : `http://` + config.host + `:8080` + row.prof,
-                    row.prof2 == null
-                      ? null
-                      : `http://` + config.host + `:8080` + row.prof2,
-                    row.prof3 == null
-                      ? null
-                      : `http://` + config.host + `:8080` + row.prof3,
-                    row.prof4 == null
-                      ? null
-                      : `http://` + config.host + `:8080` + row.prof4,
-                    row.prof5 == null
-                      ? null
-                      : `http://` + config.host + `:8080` + row.prof5,
-                  ];
-                  var details = {
-                    partname: row.partname,
-                    profs: prof,
-                  };
-                  (this as any).$emit("show-picture", details);
-                },
-              },
-            },
+            title: "分类编码",
             align: "center",
-          },
-          {
-            title: "物料编码",
-            field: "partcode",
-          },
-          {
-            title: "物料编码2",
-            field: "partco",
+            field: "typeCode",
             editRender: {
-              name: "input",
+              name: "$input",
             },
           },
           {
-            field: "partname",
-            title: "物料名称",
-          },
-          {
-            title: "库存单位",
-            field: "unit",
-          },
-          {
-            title: "采购单位",
-            field: "buyunit",
+            title: "分类名称",
+            field: "typeName",
             editRender: {
-              name: "select",
-              options: [{ label: "个", value: "个" }],
+              name: "$input",
             },
           },
           {
-            title: "规格",
-            field: "spec",
-          },
-          {
-            title: "特征",
-            field: "character",
+            title: "上级分类编号",
+            field: "parentCode",
+            editRender: {
+              name: "$input",
+            },
           },
         ],
         importConfig: {
@@ -285,12 +221,12 @@ export default {
           range: true,
         },
         editRules: {
-          name: [
-            { required: true, message: "app.body.valid.rName" },
-            { min: 3, max: 50, message: "名称长度在 3 到 50 个字符" },
+          typeCode: [
+            { required: true, message: "分类编码必填" },
+            { min: 3, max: 50, message: "长度在 3 到 50 个字符" },
           ],
-          email: [{ required: true, message: "邮件必须填写" }],
-          role: [{ required: true, message: "角色必须填写" }],
+          typeName: [{ required: true, message: "分类名称必填" }],
+          parentCode: [{ required: false, message: "顶级分类可不填" }],
         },
         editConfig: {
           trigger: "click",
@@ -300,11 +236,22 @@ export default {
       },
     };
   },
+  created() {
+    // (this as any).findSexList();
+  },
   methods: {
     async findSexList() {
       const sexList = await XEAjax.get(
         "http://121.36.220.233:8080/api/v1/product/creates"
       );
+      //   const sexList = await function () {
+      //     return new Promise((resolve) => {
+      //       resolve([
+      //         { value: 1, label: "男" },
+      //         { value: 0, label: "女" },
+      //       ]);
+      //     });
+      //   };
       // 异步更新下拉选项
       (this as any).sexList = sexList;
       const xGrid = (this as any).$refs.xGrid;

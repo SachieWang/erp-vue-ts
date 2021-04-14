@@ -1383,7 +1383,7 @@
   optionalDependencies:
     fork-ts-checker-webpack-plugin-v5 "npm:fork-ts-checker-webpack-plugin@^5.0.11"
 
-"@vue/cli-plugin-vuex@^4.5.12":
+"@vue/cli-plugin-vuex@^4.5.12", "@vue/cli-plugin-vuex@~4.5.0":
   version "4.5.12"
   resolved "https://registry.npm.taobao.org/@vue/cli-plugin-vuex/download/@vue/cli-plugin-vuex-4.5.12.tgz#f7fbe177ee7176f055b546e9e74472f9d9177626"
   integrity sha1-9/vhd+5xdvBVtUbp50Ry+dkXdiY=
@@ -8857,6 +8857,11 @@ vue@^3.0.0:
     "@vue/compiler-dom" "3.0.9"
     "@vue/runtime-dom" "3.0.9"
     "@vue/shared" "3.0.9"
+
+vuex@^4.0.0-0:
+  version "4.0.0"
+  resolved "https://registry.npm.taobao.org/vuex/download/vuex-4.0.0.tgz?cache=0&sync_timestamp=1612277384353&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvuex%2Fdownload%2Fvuex-4.0.0.tgz#ac877aa76a9c45368c979471e461b520d38e6cf5"
+  integrity sha1-rId6p2qcRTaMl5Rx5GG1INOObPU=
 
 vxe-table-plugin-element@^3.0.2:
   version "3.0.2"
